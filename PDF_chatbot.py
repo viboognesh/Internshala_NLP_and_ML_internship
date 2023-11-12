@@ -46,3 +46,30 @@ messages = [
 
 prompt = ChatPromptTemplate.from_messages(messages)
 chain_type_kwargs = {"prompt": prompt}
+
+
+@cl.on_chat_start
+async def on_chat_start():
+    files = None
+
+    # Wait for the user to upload a file
+    while files == None:
+        files = await cl.AskFileMessage(
+            content="Please upload a pdf file to begin!",
+            accept=["application/pdf"],
+            max_size_mb=20,
+            timeout=180,
+        ).send()
+
+    file = files[0]
+
+    print("Displaying message of beginning of processing")
+    msg = cl.Message(
+        content=f"Processing `{file.name}`...", disable_human_feedback=True
+    )
+    await msg.send()
+
+
+@cl.on_message
+async def on_message():
+    pass
