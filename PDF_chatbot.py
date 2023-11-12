@@ -88,6 +88,13 @@ async def on_chat_start():
     print("Creating metadata")
     metadatas = [{"source": f"{i}-pl"} for i in range(len(texts))]
 
+    # Create a Chroma vector store
+    print("Creating Chroma vector store")
+    embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
+    docsearch = await cl.make_async(Chroma.from_texts)(
+        texts, embeddings, metadatas=metadatas
+    )
+
 
 @cl.on_message
 async def on_message():
