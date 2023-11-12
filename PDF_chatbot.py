@@ -95,6 +95,17 @@ async def on_chat_start():
         texts, embeddings, metadatas=metadatas
     )
 
+    print("Creating message history")
+    message_history = ChatMessageHistory()
+
+    print("Creating memory")
+    memory = ConversationBufferMemory(
+        memory_key="chat_history",
+        output_key="answer",
+        chat_memory=message_history,
+        return_messages=True,
+    )
+
 
 @cl.on_message
 async def on_message():
