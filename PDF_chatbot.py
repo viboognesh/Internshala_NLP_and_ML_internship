@@ -69,6 +69,25 @@ async def on_chat_start():
     )
     await msg.send()
 
+    # Convert the AskFileResponse object to a file-like object
+    print("Converting the AskFileResponse object to a file-like object")
+    file_like = io.BytesIO(file.content)
+
+    # Extract the text from PDF file
+    print("Extracting the text from PDF file")
+    text = ""
+    pdf_reader = PdfReader(file_like)
+    for page in pdf_reader.pages:
+        text = text + page.extract_text()
+
+    # Split the text into chunks
+    print("Splitting the text")
+    texts = text_splitter.split_text(text)
+
+    # Create a metadata for each chunk
+    print("Creating metadata")
+    metadatas = [{"source": f"{i}-pl"} for i in range(len(texts))]
+
 
 @cl.on_message
 async def on_message():
