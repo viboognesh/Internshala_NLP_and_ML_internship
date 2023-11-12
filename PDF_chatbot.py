@@ -106,6 +106,26 @@ async def on_chat_start():
         return_messages=True,
     )
 
+    # Create a chain that uses the Chroma vector store
+    print("Creating chain")
+    chain = ConversationalRetrievalChain.from_llm(
+        HuggingFaceHub(
+            repo_id="google/flan-t5-xxl",
+            model_kwargs={"temperature": 0.5, "max_length": 2048},
+        ),
+        chain_type="stuff",
+        retriever=docsearch.as_retriever(),
+        memory=memory,
+        return_source_documents=True,
+    )
+
+    # Let the user know that the system is ready
+    print("displaying message of completion")
+    msg.content = f"Processing `{file.name}` done. You can now ask questions!"
+    await msg.update()
+
+    cl.user_session.set("chain", chain)
+
 
 @cl.on_message
 async def on_message():
