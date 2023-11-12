@@ -1,0 +1,10 @@
+openai
+langchain
+python-dotenv
+huggingface_hub
+pypdf2
+InstructorEmbedding
+sentence_transformers
+tiktoken
+chainlit
+chromadb
