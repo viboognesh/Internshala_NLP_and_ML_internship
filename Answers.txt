@@ -1,0 +1,134 @@
+Question 1(Weightage 10%):
+Explain the attention mechanism utilized in the architecture of transformers, using your own words.
+
+    Answer:
+    Transformer models in LLM are used to predict the next word(or token) in the given sentence, but 
+    simply given the dataset of language texts, and huge amount of words that are possible to appear 
+    after a word, it is impossible to predict the next word with expected accuracy. This is where 
+    attention mechanism is used to improve the efficiency and accuracy of the predicted words. In 
+    the neural networks that is used to train and predict the words, a neural network layer is added
+    to the network that assigns weightage to each words based on the context of the sentence given,
+    which improves the accuracy of the word predicted to great extent.
+
+    Example: Just given the word "are" and if we ask the network to predict the next word, there are
+    lots of words which are possible to take the next position in the sentence.The predictions 
+    "are animals", "are trees", "are students", "are you" are all likely to appear in the English 
+    language but, with context of the previous words in the sentence like "Hello, how are", the 
+    possiblity of the word "you" appearing after "are" in the sentence "Hello, how are" "you" is 
+    more likely. This is exactly what attention mechanism does in the transformer neural network 
+    model. The attention mechanism layer of the transformer pays attention to the previous words
+    in the sentence and gives more weightage to words that are more likely to appear in the 
+    sentence like "you" in our example. This greatly improves the predictions in our model, and 
+    helps the LLM model predict words that are more relevant to the context of the sentence, 
+    instead of just random words that appear after the previous word in the English language.
+    This also helps the model to predict word that make coherent sentence as the model tries
+    to predict whole sentence and paragraphs.
+
+Question 2(Weightage 15%):
+In your own words, elucidate Reinforcement Learning from Human Feedback (RLHF) and 
+distinguish it from instruction fine-tuning.
+
+    Answer:
+    Reinforcement Learning from Human Feedback is a framework of Reinforcement Learning
+    where the machine learning neural network improves upon it output through human feedback 
+    like evaluations and corrective signals that are given by humans after each iteration of 
+    learning whereas in instruction fine-tuning, the model improves itself by correcting its 
+    output based on the explicit and detailed instruction that it received at the start of the 
+    training. In short, the RLHF framework improves itself based on human feedback at each 
+    iteration and instruction fine-tuning framework improves itself by trying to fulfill the 
+    already given condition and instruction at the start of the training.
+
+Question 3(Weightage 15%):
+Provide an overview of the various methods for Parameter Efficient Fine-Tuning. Additionally, 
+discuss the advantages and disadvantages associated with each method.
+
+    Answer:
+    Parameter Efficient Fine-Tuning (PEFT) is a method used to fine-tune large-scale pre-trained 
+    language models with fewer parameters. This method is crucial in reducing the computational 
+    cost and time associated with fine-tuning large neural networks. There are several methods 
+    for PEFT, each with its own advantages and disadvantages.
+
+    Prompt Tuning: 
+        The idea behind prompt tuning is to prepend the model input embeddings with a trainable tensor, 
+        known as a "soft prompt". This tensor is optimized directly through gradient descent. The soft 
+        prompt is learned during the fine-tuning process. The advantage of this method is that it is 
+        incredibly parameter-efficient, especially for larger models. However, it only becomes comparable 
+        with full fine-tuning at the 10B model scale. Also, increasing the length of the input by 20-100 
+        tokens can significantly increase computation, given the quadratic complexity of the transformer.
+
+    Advantages: 
+        Incredibly parameter-efficient, especially for larger models;
+
+    Disadvantages: 
+        Increased computation with longer input length due to quadratic complexity of the transformer; 
+
+    AdaMix: 
+        AdaMix improves the performance of adapters by utilizing multiple adapters in a 
+        mixture-of-experts (MoE) fashion. Each adapter layer is a set of layers (experts), and for 
+        each forward pass only a small set of experts is activated. 
+
+    Advantages:
+        AdaMix employs smaller adapter hidden states, which helps distribute the parameter load 
+        among the various experts more efficiently.
+
+    Disadvantages:
+        However, the consistency regularization technique increases computational requirements and 
+        memory consumption, as it needs to keep two versions of the hidden states and gradients over 
+        two model forward passes with different experts.
+
+    Prefix Tuning: 
+        This approach is very similar to Prompt-tuning, but the soft prompts are added in each layer. 
+
+    Advantages:
+        Prefix tuning stores 1000x fewer parameters than a fully fine-tuned model, which means you 
+        can use one large language model for many tasks 
+
+    Disadvantages:
+        Prefix tuning modifies the input data in a more complex and nuanced way which can make 
+        the method more difficult to implement and understand.
+        Prefix tuning is commonly used for text completion and natural language generation tasks, 
+        which may limit its applicability to other types of tasks.
+
+    MAM Adapters: 
+        The Mix-and-Match Adapters (MAM) method is a combination of Prefix Tuning and parallel 
+        adapters, designed to adapt the pre-trained model to a specific task in a parameter-efficient manner.
+
+        In the MAM method, the pre-trained model is augmented with a trainable module, known as an adapter. 
+        The adapter is a fully-connected network that is inserted between the layers of the pre-trained model. 
+        The adapter is trained along with the rest of the model, but only the parameters of the adapter are 
+        updated during fine-tuning. The pre-trained parameters are kept fixed.
+
+        The MAM method also involves the use of soft prompts. Soft prompts are prepended to the model input 
+        embeddings and are trained to modify the model's attention mechanism. This allows the model to adapt 
+        to a new task without changing the majority of its parameters.
+
+    Advantages:
+        The MAM adapter method is designed to be flexible and can be used with a wide variety of tasks and 
+        pre-trained models. It provides a balance between parameter efficiency and task-specific adaptation, 
+        making it a valuable tool in the field of Parameter Efficient Fine-Tuning (PEFT)
+
+    Disadvantages:
+
+
+    LoRA: 
+        This method hypothesizes that the change of weights during model tuning has a low intrinsic rank. 
+        On the basis of this hypothesis, it is proposed to optimize the low-rank decomposition for the change 
+        of original weight matrices in the self-attention modules. In deployment, the optimized low-rank 
+        decomposition matrices are multiplied to obtain the delta of self-attention weight matrices.
+
+    Advantages:
+        LoRa allows for a large number of parameters to be fine-tuned while maintaining the efficiency of 
+        parameter-efficient methods. This is because the 𝑾up weights, which are used to adjust the 𝑾down weights, 
+        have a low intrinsic rank and therefore require fewer parameters to be fine-tuned.
+
+    Disadvantages:
+        LoRa requires a significant amount of computational resources, as it involves optimizing the low-rank 
+        decomposition of the original weight matrices. This can make the method more resource-intensive compared 
+        to other parameter-efficient fine-tuning methods.
+
+Question 4(Weightage 60%):
+Your task is to develop a chatbot that can answer questions based on the content of a given PDF file. 
+The solution should employ a vector store to parse and store the document.
+
+    Link to GitHub repository:
+    https://github.com/viboognesh/Internshala_NLP_and_ML_internship 
